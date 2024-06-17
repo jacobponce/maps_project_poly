@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, Image, Platform } from 'react-native';
+import { StyleSheet, Image, Platform, ScrollView, View } from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -9,33 +9,35 @@ import { ThemedView } from '@/components/ThemedView';
 
 export default function TabTwoScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
-      <ThemedView style={styles.titleContainer}>
+    <ScrollView contentContainerStyle={{paddingTop:80, paddingLeft:20}}>
+      <View style={styles.titleContainer}>
         <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
+      </View>
       <ThemedText>Darryl better than surge</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
+      <ThemedView style={styles.titleContainer}>
+        <Collapsible title="File-based routing">
+          <ThemedText>
+            This app has two screens:{' '}
+            <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
+            <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
+          </ThemedText>
+          <ThemedText>
+            The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
+            sets up the tab navigator.
+          </ThemedText>
+          <ExternalLink href="https://docs.expo.dev/router/introduction">
+            <ThemedText type="link">Learn more</ThemedText>
+          </ExternalLink>
+        </Collapsible>
+      </ThemedView>
+      <View style={styles.titleContainer}>
+        <Collapsible title="Android, iOS, and web support">
+          <ThemedText>
+            You can open this project on Android, iOS, and the web. To open the web version, press{' '}
+            <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
+          </ThemedText>
+        </Collapsible>
+      </View>
       <Collapsible title="Images">
         <ThemedText>
           For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
@@ -84,7 +86,7 @@ export default function TabTwoScreen() {
           ),
         })}
       </Collapsible>
-    </ParallaxScrollView>
+    </ScrollView>
   );
 }
 
