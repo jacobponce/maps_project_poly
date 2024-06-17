@@ -13,7 +13,7 @@ export default function TabTwoScreen() {
       <View style={styles.titleContainer}>
         <ThemedText type="title">Explore</ThemedText>
       </View>
-      <ThemedText>Darryl better than surge</ThemedText>
+      <ThemedText>jacob is my son</ThemedText>
       <ThemedView style={styles.titleContainer}>
         <Collapsible title="File-based routing">
           <ThemedText>
