@@ -78,7 +78,7 @@ const ClubEvents = () => {
             borderRightWidth: 20,
             borderRightColor: '#FFFFFF',
         }}>
-        <ThemedText style={{ fontSize: 30, paddingTop: 30, marginBottom: 20, fontFamily:'NunitoSans'}}>
+        <ThemedText type="defaultSemiBold" style={{ fontSize: 30, paddingTop: 30, marginBottom: 20, fontFamily:'NunitoSans'}}>
                 Upcoming Events
         </ThemedText>
         <FlatList
