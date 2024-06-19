@@ -70,12 +70,12 @@ const ClubEvents = () => {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: '#eeeeee',
+        backgroundColor: '#ffffff',
         justifyContent: 'flex-start',
         borderLeftWidth: 20,
-        borderLeftColor: '#eeeeee',
+        borderLeftColor: '#ffffff',
         borderRightWidth: 20,
-        borderRightColor: '#eeeeee',
+        borderRightColor: '#ffffff',
       }}
     >
       <ThemedText style={{ fontSize: 30, paddingTop: 10, marginBottom: 10 }}>Club Events</ThemedText>

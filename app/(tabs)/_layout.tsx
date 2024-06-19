@@ -14,7 +14,6 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         tabBarActiveBackgroundColor: Colors['light'].background,
-        tabBarInactiveBackgroundColor: Colors['light'].backgroundInactive,
         tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault,
         headerShown: false,
 
