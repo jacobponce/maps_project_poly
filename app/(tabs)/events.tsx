@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderStyle: 'solid',
+    borderRadius: 10,
   },
   title: {
     fontSize: 20,
@@ -68,22 +69,22 @@ const ClubEvents = () => {
 
   return (
     <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: '#eeeeee',
-        justifyContent: 'flex-start',
-        borderLeftWidth: 20,
-        borderLeftColor: '#eeeeee',
-        borderRightWidth: 20,
-        borderRightColor: '#eeeeee',
-      }}
-    >
-      <ThemedText style={{ fontSize: 30, paddingTop: 10, marginBottom: 10 }}>Club Events</ThemedText>
-      <FlatList
-        data={events}
-        renderItem={({ item }) => <Event event={item} />}
-        keyExtractor={(item, index) => index.toString()}
-      />
+        style={{
+            flex: 1,
+            backgroundColor: '#FFFFFF',
+            justifyContent: 'flex-start',
+            borderLeftWidth: 20,
+            borderLeftColor: '#FFFFFF',
+            borderRightWidth: 20,
+            borderRightColor: '#FFFFFF',
+        }}>
+        <ThemedText style={{ fontSize: 30, paddingTop: 30, marginBottom: 20, fontFamily:'NunitoSans'}}>
+                Upcoming Events
+        </ThemedText>
+        <FlatList
+            data={events}
+            renderItem={({ item }) => <Event event={item} />}
+            keyExtractor={(item, index) => index.toString()}/>
     </SafeAreaView>
   );
 };
