@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderStyle: 'solid',
+    borderRadius: 10,
   },
   title: {
     fontSize: 20,
@@ -70,12 +71,12 @@ const ClubEvents = () => {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#eeeeee',
         justifyContent: 'flex-start',
         borderLeftWidth: 20,
-        borderLeftColor: '#ffffff',
+        borderLeftColor: '#eeeeee',
         borderRightWidth: 20,
-        borderRightColor: '#ffffff',
+        borderRightColor: '#eeeeee',
       }}
     >
       <ThemedText style={{ fontSize: 30, paddingTop: 10, marginBottom: 10 }}>Club Events</ThemedText>
