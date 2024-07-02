@@ -38,7 +38,7 @@ export default function MapView1() {
     const newLocation: LocationOfInterest = {
       title: "New Marker",
       location: event.nativeEvent.coordinate,
-      description: `Derrick is my Son\nLatitude: ${latitude}, Longitude: ${longitude}`
+      description: `Jacob is my Son\nLatitude: ${latitude}, Longitude: ${longitude}`
     };
     setLocationsOfInterest([...locationsOfInterest, newLocation]);
   };
@@ -95,14 +95,3 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 });
-
-// import React from 'react';
-// import { View, Text } from 'react-native';
-
-// export default function MyPage() {
-//   return (
-//     <View>
-//       <Text>This is my page.</Text>
-//     </View>
-//   );
-// }
