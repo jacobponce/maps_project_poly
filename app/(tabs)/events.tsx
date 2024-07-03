@@ -94,7 +94,7 @@ const ClubEvents = () => {
       <ThemedText style={{ fontSize: 30, paddingTop: 10, marginBottom: 10 }}>Club Events</ThemedText>
       <Calendar
         markedDates={markedDates}
-        onDayPress={(day) => setSelectedDate(day.dateString)}
+        onDayPress={(day: { dateString: string }) => setSelectedDate(day.dateString)}
       />
       {selectedDate ? (
         eventsForSelectedDate.length > 0 ? (
