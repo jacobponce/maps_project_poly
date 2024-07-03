@@ -5,15 +5,20 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-
-
-export default function RootLayout() {
+const RootLayoutNav = () => {
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
+        <Stack.Screen name="index"  />
+        <Stack.Screen name="login"  />
+        <Stack.Screen name="(tabs)"  />
       </Stack>
+    </GestureHandlerRootView>
   );
-}
+};
 
+export default RootLayoutNav;

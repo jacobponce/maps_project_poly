@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, FlatList, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
 import { useFonts } from 'expo-font';
 import { Calendar } from 'react-native-calendars';
 
@@ -91,7 +90,7 @@ const ClubEvents = () => {
         borderRightColor: '#ffffff',
       }}
     >
-      <ThemedText style={{ fontSize: 30, paddingTop: 10, marginBottom: 10 }}>Club Events</ThemedText>
+      <Text style={{ fontSize: 30, paddingTop: 10, marginBottom: 10 }}>Club Events</Text>
       <Calendar
         markedDates={markedDates}
         onDayPress={(day: { dateString: string }) => setSelectedDate(day.dateString)}
@@ -105,12 +104,12 @@ const ClubEvents = () => {
       />
       ) : (
         <View style={{ padding: 10 }}>
-          <ThemedText style={{ fontSize: 24 }}>You have no events today.</ThemedText>
+          <Text style={{ fontSize: 24 }}>You have no events today.</Text>
         </View>
       )
     ) : (
       <View style={{ padding: 10 }}>
-        <ThemedText style={{ fontSize: 24 }}>Select a date to see the events.</ThemedText>
+        <Text style={{ fontSize: 24 }}>Select a date to see the events.</Text>
       </View>
     )}
     </SafeAreaView>
