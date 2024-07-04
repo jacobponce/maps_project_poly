@@ -34,12 +34,12 @@ const styles = StyleSheet.create({
 const Event = ({ event, expanded }: { event: EventType, expanded: boolean }) => {
   return (
     <View style={styles.container}>
-      <ThemedText style={styles.title}>{event.name} - {event.clubName}</ThemedText>
+      <Text style={styles.title}>{event.name} - {event.clubName}</Text>
       {expanded && (
         <View style={styles.details}>
-          <ThemedText>Date: {event.dateOfEvent}</ThemedText>
-          <ThemedText>Duration: {event.duration}</ThemedText>
-          <ThemedText>Location: {event.location}</ThemedText>
+          <Text>Date: {event.dateOfEvent}</Text>
+          <Text>Duration: {event.duration}</Text>
+          <Text>Location: {event.location}</Text>
         </View>
       )}
     </View>

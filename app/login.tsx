@@ -23,7 +23,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -49,6 +48,7 @@ const Login = () => {
           onChangeText={setPassword}
           value={password}
           style={styles.inputField}
+          secureTextEntry={true}
         />
       </View>
 
