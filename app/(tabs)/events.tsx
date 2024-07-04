@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, FlatList, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
 import { useFonts } from 'expo-font';
 import { Calendar } from 'react-native-calendars';
 
@@ -35,12 +34,12 @@ const styles = StyleSheet.create({
 const Event = ({ event, expanded }: { event: EventType, expanded: boolean }) => {
   return (
     <View style={styles.container}>
-      <ThemedText style={styles.title}>{event.name} - {event.clubName}</ThemedText>
+      <Text style={styles.title}>{event.name} - {event.clubName}</Text>
       {expanded && (
         <View style={styles.details}>
-          <ThemedText>Date: {event.dateOfEvent}</ThemedText>
-          <ThemedText>Duration: {event.duration}</ThemedText>
-          <ThemedText>Location: {event.location}</ThemedText>
+          <Text>Date: {event.dateOfEvent}</Text>
+          <Text>Duration: {event.duration}</Text>
+          <Text>Location: {event.location}</Text>
         </View>
       )}
     </View>
@@ -91,10 +90,10 @@ const ClubEvents = () => {
         borderRightColor: '#ffffff',
       }}
     >
-      <ThemedText style={{ fontSize: 30, paddingTop: 10, marginBottom: 10 }}>Club Events</ThemedText>
+      <Text style={{ fontSize: 30, paddingTop: 10, marginBottom: 10 }}>Club Events</Text>
       <Calendar
         markedDates={markedDates}
-        onDayPress={(day) => setSelectedDate(day.dateString)}
+        onDayPress={(day: { dateString: string }) => setSelectedDate(day.dateString)}
       />
       {selectedDate ? (
         eventsForSelectedDate.length > 0 ? (
@@ -105,12 +104,12 @@ const ClubEvents = () => {
       />
       ) : (
         <View style={{ padding: 10 }}>
-          <ThemedText style={{ fontSize: 24 }}>You have no events today.</ThemedText>
+          <Text style={{ fontSize: 24 }}>You have no events today.</Text>
         </View>
       )
     ) : (
       <View style={{ padding: 10 }}>
-        <ThemedText style={{ fontSize: 24 }}>Select a date to see the events.</ThemedText>
+        <Text style={{ fontSize: 24 }}>Select a date to see the events.</Text>
       </View>
     )}
     </SafeAreaView>
