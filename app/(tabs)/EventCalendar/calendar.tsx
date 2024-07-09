@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, FlatList, View, Text, TouchableOpacity, StyleSheet, Button, TextInput } from 'react-native';
+import { SafeAreaView, FlatList, View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Calendar } from 'react-native-calendars';
 import { FIREBASE_DB } from '@/FirebaseConfig';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { router, useRouter } from 'expo-router';
 
 // Define the event object type
 type EventType = {
-  name: string;
+  eventName: string;
   clubName: string;
-  dateOfEvent: string;
-  duration: string;
+  start: string;
+  end: string;
   location: string;
 };
 
@@ -31,48 +31,17 @@ const styles = StyleSheet.create({
   details: {
     paddingTop: 10,
   },
-  searchContainer: {
-    position: 'relative',
-    zIndex: 2, 
-  },
-  search: {
-    height: 40,
-    borderColor: 'black',
-    borderWidth: 2,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    zIndex: 2,
-  },
-  dropdown: {
-    maxHeight: 200,
-    borderColor: 'black',
-    borderWidth: 1,
-    backgroundColor: 'white',
-    position: 'absolute',
-    top: 50,
-    left: 10,
-    right: 10,
-    zIndex: 1,
-  },
-  dropdownClub: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'black', 
-  },
-  dropdownClubText: {
-    fontSize: 16,
-  }
 });
 
 // Modified Event component to include collapsible functionality
 const Event = ({ event, expanded }: { event: EventType, expanded: boolean }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{event.name} - {event.clubName}</Text>
+      <Text style={styles.title}>{event.eventName} - {event.clubName}</Text>
       {expanded && (
         <View style={styles.details}>
-          <Text>Date: {event.dateOfEvent}</Text>
-          <Text>Duration: {event.duration}</Text>
+          <Text>Start: {event.start}</Text>
+          <Text>End: {event.end}</Text>
           <Text>Location: {event.location}</Text>
         </View>
       )}
@@ -87,36 +56,26 @@ const ClubEvents = () => {
     'WorkSans': require('../../../assets/fonts/WorkSans-Bold.ttf'),
   });
 
-  const [events, setEvents] = useState<EventType[]>([
-    { name: 'Ay club', clubName: 'Tech Club', dateOfEvent: '2024-07-15', duration: '2 hours', location: 'Auditorium' },
-    { name: 'Derrick Sr club', clubName: 'Jacob Dad Club', dateOfEvent: '2024-07-15', duration: '4 hours', location: 'Wrangler Drive' },
-    { name: 'Surge Club', clubName: 'Top Brawlers Club', dateOfEvent: '2024-07-02', duration: '24 hours', location: 'Brawl Pass' },
-    { name: 'Music Night', clubName: 'Music Club', dateOfEvent: '2024-07-20', duration: '3 hours', location: 'Open Ground' },
-    { name: 'Dance Workshop', clubName: 'Dance Club', dateOfEvent: '2024-07-25', duration: '2 hours', location: 'Dance Studio' },
-    { name: 'Art Exhibition', clubName: 'Art Club', dateOfEvent: '2024-07-30', duration: '4 hours', location: 'Art Gallery' },
-    { name: 'Literary Fest', clubName: 'Literary Club', dateOfEvent: '2024-07-05', duration: '5 hours', location: 'Library' },
-    // Add more events here
-  ]);
+  const [events, setEvents] = useState<EventType[]>([]);
+  
+    useEffect(() => {
+      const fetchEvents = async () => {
+        const querySnapshot = await getDocs(collection(FIREBASE_DB, "events")); // Assuming your collection is named "clubs"
+        const fetchedEvents = querySnapshot.docs.map(doc => ({ ...doc.data() })) as EventType[];
+        setEvents(fetchedEvents);
+      };
+  
+      fetchEvents();
+    }, []);
 
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
   const markedDates = events.reduce((acc: { [key: string]: { marked: boolean; dotColor: string } }, event) => {
-    acc[event.dateOfEvent] = { marked: true, dotColor: 'green' };
+    acc[event.start] = { marked: true, dotColor: 'blue' };
     return acc;
   }, {});
 
-  const filteredEvents = events.filter(event => 
-    event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    event.clubName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const filteredClubs = [...new Set(events.map(event => event.clubName))].filter(club =>
-    club.toLowerCase().includes(searchQuery.toLowerCase())
-  ).slice(0, 8);
-
-  const eventsForSelectedDate = filteredEvents.filter(event => event.dateOfEvent === selectedDate);
+  const eventsForSelectedDate = events.filter(event => event.start === selectedDate);
   const router = useRouter();
 
   useEffect(() => {
@@ -186,7 +145,7 @@ const ClubEvents = () => {
         eventsForSelectedDate.length > 0 ? (
         <FlatList
           data={eventsForSelectedDate}
-          renderItem={({ item }) => (<Event event={item} expanded={item.dateOfEvent === selectedDate} />)}
+          renderItem={({ item }) => (<Event event={item} expanded={item.start === selectedDate} />)}
           keyExtractor={(item, index) => index.toString()}
       />
       ) : (
