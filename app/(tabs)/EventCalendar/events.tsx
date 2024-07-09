@@ -177,6 +177,11 @@ const ClubEvents = () => {
       <Calendar
         markedDates={markedDates}
         onDayPress={(day: { dateString: string }) => setSelectedDate(day.dateString)}
+        sty
+      />
+      <Button
+        title="New Event"
+        onPress={() => navNewEvent()}
       />
       <Button
         title="New Event"
