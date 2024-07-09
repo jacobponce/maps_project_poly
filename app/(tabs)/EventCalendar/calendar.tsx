@@ -5,15 +5,17 @@ import { Calendar } from 'react-native-calendars';
 import { FIREBASE_DB } from '@/FirebaseConfig';
 import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { router, useRouter } from 'expo-router';
-
+import useEventsList from './eventsList';
+import { EventType } from './EventType';
 // Define the event object type
-type EventType = {
-  eventName: string;
-  clubName: string;
-  start: string;
-  end: string;
-  location: string;
-};
+
+// export type EventType = {
+//   eventName: string;
+//   clubName: string;
+//   start: Date;
+//   end: Date;
+//   location: string;
+// };
 
 const styles = StyleSheet.create({
   container: {
