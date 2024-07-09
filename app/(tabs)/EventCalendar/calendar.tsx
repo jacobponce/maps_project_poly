@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, FlatList, View, Text, TouchableOpacity, StyleSheet, Button, TextInput } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Calendar } from 'react-native-calendars';
-import { FIREBASE_DB } from '@/FirebaseConfig';
-import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { router, useRouter } from 'expo-router';
 import useEventsList from './eventsList';
 import { EventType } from './EventType';
@@ -12,6 +10,7 @@ import { EventType } from './EventType';
 // export type EventType = {
 //   eventName: string;
 //   clubName: string;
+// data: string;
 //   start: Date;
 //   end: Date;
 //   location: string;
@@ -70,14 +69,11 @@ const styles = StyleSheet.create({
 const Event = ({ event, expanded }: { event: EventType, expanded: boolean }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{event.eventName} - {event.clubName}</Text>
-      {expanded && (
-        <View style={styles.details}>
-          <Text>Start: {event.start}</Text>
-          <Text>End: {event.end}</Text>
-          <Text>Location: {event.location}</Text>
-        </View>
-      )}
+      <Text style={styles.title}>{event.eventName}</Text>
+      <Text>Club Name: {event.clubName}</Text>
+      <Text>Start: {event.start}</Text>
+      <Text>End: {event.end}</Text>
+      <Text>Location: {event.location}</Text>
     </View>
   );
 };
@@ -89,29 +85,19 @@ const ClubEvents = () => {
     'WorkSans': require('../../../assets/fonts/WorkSans-Bold.ttf'),
   });
 
-  const [events, setEvents] = useState<EventType[]>([]);
-  
-    useEffect(() => {
-      const fetchEvents = async () => {
-        const querySnapshot = await getDocs(collection(FIREBASE_DB, "events")); // Assuming your collection is named "clubs"
-        const fetchedEvents = querySnapshot.docs.map(doc => ({ ...doc.data() })) as EventType[];
-        setEvents(fetchedEvents);
-      };
-  
-      fetchEvents();
-    }, []);
+  const events = useEventsList();
 
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
   const markedDates = events.reduce((acc: { [key: string]: { marked: boolean; dotColor: string } }, event) => {
-    acc[event.dateOfEvent] = { marked: true, dotColor: 'green' };
+    acc[event.date] = { marked: true, dotColor: 'green' };
     return acc;
   }, {});
 
   const filteredEvents = events.filter(event => 
-    event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    event.eventName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     event.clubName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -119,7 +105,7 @@ const ClubEvents = () => {
     club.toLowerCase().includes(searchQuery.toLowerCase())
   ).slice(0, 8);
 
-  const eventsForSelectedDate = filteredEvents.filter(event => event.dateOfEvent === selectedDate);
+  const eventsForSelectedDate = filteredEvents.filter(event => event.date === selectedDate);
   const router = useRouter();
 
   useEffect(() => {
@@ -189,7 +175,7 @@ const ClubEvents = () => {
         eventsForSelectedDate.length > 0 ? (
         <FlatList
           data={eventsForSelectedDate}
-          renderItem={({ item }) => (<Event event={item} expanded={item.start === selectedDate} />)}
+          renderItem={({ item }) => (<Event event={item} expanded={item.date === selectedDate} />)}
           keyExtractor={(item, index) => index.toString()}
       />
       ) : (

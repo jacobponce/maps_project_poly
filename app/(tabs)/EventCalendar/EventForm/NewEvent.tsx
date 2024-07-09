@@ -8,6 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 const List = ({ navigation }: any) => {
   const [eventName, setEventName] = useState('');
   const [clubName, setClubName] = useState('');
+  const [date, setDate] = useState('');
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(new Date()); // Added end state
   const [location, setLocation] = useState('');
@@ -19,13 +20,15 @@ const List = ({ navigation }: any) => {
     const docRef = await addDoc(collection(FIREBASE_DB, 'events'), {
       eventName,
       clubName,
-      start: start.toString(),
-      end: end.toString(), // Added end to the database document
+      date,
+      start: start.toLocaleTimeString(),
+      end: end.toLocaleTimeString(), // Added end to the database document
       location,
     });
     console.log('Document written with ID: ', docRef.id);
     setEventName('');
     setClubName('');
+    setDate('');
     setStart(new Date());
     setEnd(new Date()); // Reset end state
     setLocation('');
@@ -45,6 +48,12 @@ const List = ({ navigation }: any) => {
     return eventName !== '' && clubName !== '' && location !== '';
   };
 
+  useEffect(() => {
+    if (start){
+    setDate(start.toISOString().split('T')[0]);
+    }
+  }, [start]);
+    
   return (
     <SafeAreaView>
       <Text>Events</Text>
