@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, FlatList, View, Text, TouchableOpacity, StyleSheet, Button, TextInput } from 'react-native';
+import { SafeAreaView, FlatList, View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Calendar } from 'react-native-calendars';
 import { router, useRouter } from 'expo-router';
@@ -32,37 +32,6 @@ const styles = StyleSheet.create({
   details: {
     paddingTop: 10,
   },
-  searchContainer: {
-    position: 'relative',
-    zIndex: 2, 
-  },
-  search: {
-    height: 40,
-    borderColor: 'black',
-    borderWidth: 2,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    zIndex: 2,
-  },
-  dropdown: {
-    maxHeight: 200,
-    borderColor: 'black',
-    borderWidth: 1,
-    backgroundColor: 'white',
-    position: 'absolute',
-    top: 50,
-    left: 10,
-    right: 10,
-    zIndex: 1,
-  },
-  dropdownClub: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'black', 
-  },
-  dropdownClubText: {
-    fontSize: 16,
-  }
 });
 
 // Modified Event component to include collapsible functionality
@@ -88,8 +57,6 @@ const ClubEvents = () => {
   const events = useEventsList();
 
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
   const markedDates = events.reduce((acc: { [key: string]: { marked: boolean; dotColor: string } }, event) => {
     acc[event.date] = { marked: true, dotColor: 'green' };
