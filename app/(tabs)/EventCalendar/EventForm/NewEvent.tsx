@@ -8,7 +8,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 const List = ({ navigation }: any) => {
   const [eventName, setEventName] = useState('');
   const [clubName, setClubName] = useState('');
-  const [dateOfEvent, setDateOfEvent] = useState(new Date());
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(new Date()); // Added end state
   const [location, setLocation] = useState('');
