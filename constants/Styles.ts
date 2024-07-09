@@ -8,7 +8,8 @@ export const defaultStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
+
   },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, FlatList, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { SafeAreaView, FlatList, View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Calendar } from 'react-native-calendars';
+import { FIREBASE_DB } from '@/FirebaseConfig';
+import { addDoc, collection } from 'firebase/firestore';
+import { router, useRouter } from 'expo-router';
 
 // Define the event object type
 type EventType = {
@@ -49,8 +52,8 @@ const Event = ({ event, expanded }: { event: EventType, expanded: boolean }) => 
 // Main component where events are stored and managed
 const ClubEvents = () => {
   const [fontsLoaded] = useFonts({
-    'NunitoSans': require('../../assets/fonts/NunitoSans.ttf'),
-    'WorkSans': require('../../assets/fonts/WorkSans-Bold.ttf'),
+    'NunitoSans': require('../../../assets/fonts/NunitoSans.ttf'),
+    'WorkSans': require('../../../assets/fonts/WorkSans-Bold.ttf'),
   });
 
   const [events, setEvents] = useState<EventType[]>([
@@ -72,11 +75,17 @@ const ClubEvents = () => {
   }, {});
 
   const eventsForSelectedDate = events.filter(event => event.dateOfEvent === selectedDate);
+  const router = useRouter();
 
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0]; // Get the current date in 'YYYY-MM-DD' format
     setSelectedDate(today);
   }, []);
+
+  const navNewEvent = () => {
+    router.replace('/(tabs)/EventCalendar/EventForm/NewEvent');
+    console.log('Going to new event...');
+  };
 
   return (
     <SafeAreaView
@@ -94,6 +103,11 @@ const ClubEvents = () => {
       <Calendar
         markedDates={markedDates}
         onDayPress={(day: { dateString: string }) => setSelectedDate(day.dateString)}
+        sty
+      />
+      <Button
+        title="New Event"
+        onPress={() => navNewEvent()}
       />
       {selectedDate ? (
         eventsForSelectedDate.length > 0 ? (
