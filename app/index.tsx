@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontWeight: 'bold',
     alignSelf: 'center',
+    color: Colors.primary, 
   },
   inputField: {
     marginVertical: 4,

@@ -3,25 +3,40 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { defaultStyles } from '@/constants/Styles';
 import { FIREBASE_AUTH } from '@/FirebaseConfig';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const UserPage: React.FC = () => {
-    const handleLogout = () => {
-        // Add your logout logic here
-    };
-
+const UserPage = () => {
+    const user = FIREBASE_AUTH.currentUser;
+    const email = user?.email;
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>User Page</Text>
+      <View style={{ flex: 1, marginTop: 30 }}>
+        <SafeAreaView style={styles.profileRow}>
+          <Text style={styles.labelFont}>{email}</Text>
+        </SafeAreaView>
+        <>
             <TouchableOpacity style={[defaultStyles.btn, styles.btnPrimary]}>
                 <Text style={styles.btnPrimaryText} onPress={() => {
                     console.log('Signing out...');
                     FIREBASE_AUTH.signOut();
                 }} >Sign Out</Text>
             </TouchableOpacity>
+        </>
         </View>
     );
 };
 const styles = StyleSheet.create({
+    profileRow: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      marginVertical: 10,
+    },
+    labelFont: {
+      fontWeight: "bold",
+      flexDirection: "row",
+      fontSize: 30,
+      width: 200,
+      marginTop: 10,
+    },
     container: {
       flex: 1,
       // justifyContent: 'center',
