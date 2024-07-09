@@ -8,7 +8,11 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 const List = ({ navigation }: any) => {
   const [eventName, setEventName] = useState('');
   const [clubName, setClubName] = useState('');
+<<<<<<< HEAD
   const [date, setDate] = useState('');
+=======
+  const [dateOfEvent, setDateOfEvent] = useState(new Date());
+>>>>>>> ddc5eae (created new form system)
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(new Date()); // Added end state
   const [location, setLocation] = useState('');
@@ -20,15 +24,23 @@ const List = ({ navigation }: any) => {
     const docRef = await addDoc(collection(FIREBASE_DB, 'events'), {
       eventName,
       clubName,
+<<<<<<< HEAD
       date,
       start: start.toLocaleTimeString(),
       end: end.toLocaleTimeString(), // Added end to the database document
+=======
+      start: start.toString(),
+      end: end.toString(), // Added end to the database document
+>>>>>>> ddc5eae (created new form system)
       location,
     });
     console.log('Document written with ID: ', docRef.id);
     setEventName('');
     setClubName('');
+<<<<<<< HEAD
     setDate('');
+=======
+>>>>>>> ddc5eae (created new form system)
     setStart(new Date());
     setEnd(new Date()); // Reset end state
     setLocation('');
@@ -48,12 +60,15 @@ const List = ({ navigation }: any) => {
     return eventName !== '' && clubName !== '' && location !== '';
   };
 
+<<<<<<< HEAD
   useEffect(() => {
     if (start){
     setDate(start.toISOString().split('T')[0]);
     }
   }, [start]);
     
+=======
+>>>>>>> ddc5eae (created new form system)
   return (
     <SafeAreaView>
       <Text>Events</Text>
@@ -74,7 +89,10 @@ const List = ({ navigation }: any) => {
           mode="datetime"
           display="default"
           minuteInterval={15}
+<<<<<<< HEAD
           timeZoneName='America/Los_Angeles'
+=======
+>>>>>>> ddc5eae (created new form system)
           onChange={(event, selectedDate) => {
             setShowStartPicker(false);
             if (selectedDate) {
@@ -96,7 +114,10 @@ const List = ({ navigation }: any) => {
           mode="datetime"
           display="default"
           minuteInterval={15}
+<<<<<<< HEAD
           timeZoneName='America/Los_Angeles'
+=======
+>>>>>>> ddc5eae (created new form system)
           onChange={(event, selectedDate) => {
             setShowEndPicker(false);
             if (selectedDate) {
