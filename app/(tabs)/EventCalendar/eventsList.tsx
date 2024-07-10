@@ -5,6 +5,7 @@ import { EventType } from './EventType';
 
 const useEventsList = () => {
   const [events, setEvents] = useState<EventType[]>([]);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -19,8 +20,17 @@ const useEventsList = () => {
     };
 
     fetchEvents();
-  }, []);
+  }, [reload]);
   console.log(events)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('Reloading events...')
+      setReload(prev => !prev); // Toggle the state to trigger re-fetching
+    }, 60000); // 60000 ms = 1 minute
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, []);
 
   return events;
 };

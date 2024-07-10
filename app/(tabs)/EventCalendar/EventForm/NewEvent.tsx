@@ -74,6 +74,7 @@ const List = ({ navigation }: any) => {
           mode="datetime"
           display="default"
           minuteInterval={15}
+          timeZoneName='America/Los_Angeles'
           onChange={(event, selectedDate) => {
             setShowStartPicker(false);
             if (selectedDate) {
@@ -95,6 +96,7 @@ const List = ({ navigation }: any) => {
           mode="datetime"
           display="default"
           minuteInterval={15}
+          timeZoneName='America/Los_Angeles'
           onChange={(event, selectedDate) => {
             setShowEndPicker(false);
             if (selectedDate) {
