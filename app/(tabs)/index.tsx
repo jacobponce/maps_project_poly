@@ -3,6 +3,8 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { FIREBASE_DB } from '@/FirebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
+import useEventsList from './EventCalendar/eventsList';
+import { EventType } from './EventCalendar/EventType';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 
 interface Location {
@@ -27,59 +29,18 @@ const INITIAL_REGION = {
   longitudeDelta: 0.015,
 };
 
-const groupEventsByLocation = (events: LocationOfInterest[]) => {
-  return events.reduce((acc, event) => {
+
+export default function MapView1() {
+
+  const events = useEventsList();
+
+  const groupedEvents = events.reduce((acc, event) => {
     if (!acc[event.location.title]) {
       acc[event.location.title] = [];
     }
     acc[event.location.title].push(event);
     return acc;
-  }, {} as { [key: string]: LocationOfInterest[] });
-};
-
-
-export default function MapView1() {
-  const [locationsOfInterest, setLocationsOfInterest] = useState<LocationOfInterest[]>([]);
-  const [groupedEvents, setGroupedEvents] = useState<{ [key: string]: LocationOfInterest[] }>({});
-  const [reload, setReload] = useState(false);
-
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(FIREBASE_DB, 'events'));
-        const events = querySnapshot.docs.map(doc => {
-          const data = doc.data();
-          return {
-            eventName: data.eventName,
-            clubName: data.clubName,
-            date: data.date,
-            start: data.start,
-            end: data.end,
-            location: {
-              title: data.location.title,
-              latitude: data.location.latitude,
-              longitude: data.location.longitude,
-            },
-          };
-        });
-        setLocationsOfInterest(events);
-        setGroupedEvents(groupEventsByLocation(events));
-      } catch (error) {
-        console.error('Error fetching events:', error);
-      }
-    };
-
-    fetchEvents();
-  }, [reload]); // have this event reload when the reload state changes
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      console.log('Reloading map...')
-      setReload(prev => !prev); // Toggle the state to trigger re-fetching
-    }, 60000); // 60000 ms = 1 minute
-
-    return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, []);
+  }, {} as { [key: string]: LocationOfInterest[] }); // Create list of events grouped by loc
 
   const showLocationsOfInterest = () => {
     return Object.keys(groupedEvents).map((locationTitle, index) => {
