@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { StyleSheet, View, Image, Text } from 'react-native';
+import { FIREBASE_DB } from '@/FirebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
 
 interface Location {
+  title: string;
   latitude: number;
   longitude: number;
 }
 
 interface LocationOfInterest {
-  title: string;
+  eventName: string;
+  clubName: string;
+  date: string;
+  start: string;
+  end: string;
   location: Location;
-  description: string;
 }
 
 const INITIAL_REGION = {
@@ -21,27 +27,35 @@ const INITIAL_REGION = {
 };
 
 export default function MapView1() {
-  const [locationsOfInterest, setLocationsOfInterest] = useState<LocationOfInterest[]>([
-    {
-      title: "first",
-      location: {
-        latitude: 35.302,
-        longitude: -120.660
-      },
-      description: "test marker\nLatitude: 35.302, Longitude: -120.660"
-    }
-  ]);
+  const [locationsOfInterest, setLocationsOfInterest] = useState<LocationOfInterest[]>([]);
 
-  const handleMapPress = (event: { nativeEvent: { coordinate: Location } }) => {
-    const { latitude, longitude } = event.nativeEvent.coordinate;
-    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`); // Debugging statement
-    const newLocation: LocationOfInterest = {
-      title: "New Marker",
-      location: event.nativeEvent.coordinate,
-      description: `Jacob is my Son\nLatitude: ${latitude}, Longitude: ${longitude}`
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(FIREBASE_DB, 'events'));
+        const events = querySnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            eventName: data.eventName,
+            clubName: data.clubName,
+            date: data.date,
+            start: data.start,
+            end: data.end,
+            location: {
+              title: data.location.title,
+              latitude: data.location.latitude,
+              longitude: data.location.longitude,
+            },
+          };
+        });
+        setLocationsOfInterest(events);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
     };
-    setLocationsOfInterest([...locationsOfInterest, newLocation]);
-  };
+
+    fetchEvents();
+  }, []);
 
   const showLocationsOfInterest = () => {
     return locationsOfInterest.map((item, index) => {
@@ -50,8 +64,7 @@ export default function MapView1() {
         <Marker
           key={index}
           coordinate={item.location}
-          title={item.title}
-          description={item.description}
+          title={item.eventName}
         >
           <Image
             source={iconSource}
@@ -59,8 +72,10 @@ export default function MapView1() {
             resizeMode="contain" // Adjust how the image fits within the bounds 
           />
           <Callout>
-            <View>
-              <Text>{item.description}</Text>
+            <View style={styles.calloutContainer}>
+              <Text style={styles.calloutTitle}>Club: {item.clubName}</Text>
+              <Text style={styles.calloutSubtitle}>Event: {item.eventName}</Text>
+              <Text style={styles.calloutSubtitle}>Location: {item.location.title}</Text>
             </View>
           </Callout>
         </Marker>
@@ -78,7 +93,7 @@ export default function MapView1() {
         rotateEnabled={false}
         showsCompass={true}
         showsPointsOfInterest={false}
-        onPress={handleMapPress}
+        showsUserLocation={true}
       >
         {showLocationsOfInterest()}
       </MapView>
@@ -93,5 +108,17 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: '100%',
+  },
+  calloutContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    width: 160,
+  },
+  calloutTitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  calloutSubtitle: {
+    fontSize: 14,
   },
 });

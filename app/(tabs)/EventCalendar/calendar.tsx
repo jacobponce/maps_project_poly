@@ -73,7 +73,7 @@ const Event = ({ event, expanded }: { event: EventType, expanded: boolean }) => 
       <Text>Club Name: {event.clubName}</Text>
       <Text>Start: {event.start}</Text>
       <Text>End: {event.end}</Text>
-      <Text>Location: {event.location}</Text>
+      <Text>Location: {event.location.title}</Text>
     </View>
   );
 };
