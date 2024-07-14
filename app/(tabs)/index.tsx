@@ -3,6 +3,7 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { FIREBASE_DB } from '@/FirebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
+import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 
 interface Location {
   title: string;
@@ -26,8 +27,21 @@ const INITIAL_REGION = {
   longitudeDelta: 0.015,
 };
 
+const groupEventsByLocation = (events: LocationOfInterest[]) => {
+  return events.reduce((acc, event) => {
+    if (!acc[event.location.title]) {
+      acc[event.location.title] = [];
+    }
+    acc[event.location.title].push(event);
+    return acc;
+  }, {} as { [key: string]: LocationOfInterest[] });
+};
+
+
 export default function MapView1() {
   const [locationsOfInterest, setLocationsOfInterest] = useState<LocationOfInterest[]>([]);
+  const [groupedEvents, setGroupedEvents] = useState<{ [key: string]: LocationOfInterest[] }>({});
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -49,22 +63,34 @@ export default function MapView1() {
           };
         });
         setLocationsOfInterest(events);
+        setGroupedEvents(groupEventsByLocation(events));
       } catch (error) {
         console.error('Error fetching events:', error);
       }
     };
 
     fetchEvents();
+  }, [reload]); // have this event reload when the reload state changes
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('Reloading map...')
+      setReload(prev => !prev); // Toggle the state to trigger re-fetching
+    }, 60000); // 60000 ms = 1 minute
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
 
   const showLocationsOfInterest = () => {
-    return locationsOfInterest.map((item, index) => {
+    return Object.keys(groupedEvents).map((locationTitle, index) => {
+      const events = groupedEvents[locationTitle];
+      const firstEvent = events[0];
       const iconSource = require('@/assets/images/wbrawler.png');
       return (
         <Marker
           key={index}
-          coordinate={item.location}
-          title={item.eventName}
+          coordinate={firstEvent.location}
+          title={firstEvent.eventName}
         >
           <Image
             source={iconSource}
@@ -72,11 +98,16 @@ export default function MapView1() {
             resizeMode="contain" // Adjust how the image fits within the bounds 
           />
           <Callout>
-            <View style={styles.calloutContainer}>
-              <Text style={styles.calloutTitle}>Club: {item.clubName}</Text>
-              <Text style={styles.calloutSubtitle}>Event: {item.eventName}</Text>
-              <Text style={styles.calloutSubtitle}>Location: {item.location.title}</Text>
-            </View>
+            <GestureHandlerRootView style={styles.calloutContainer}>
+              <Text style={styles.calloutTitle}>Location: {locationTitle}</Text>
+              <ScrollView style={styles.scrollView}>
+                {events.map((event, eventIndex) => (
+                  <View key={eventIndex}>
+                    <Text style={styles.calloutSubtitle}>{event.clubName} - {event.eventName}</Text>
+                  </View>
+                ))}
+              </ScrollView>
+            </GestureHandlerRootView>
           </Callout>
         </Marker>
       );
@@ -120,5 +151,8 @@ const styles = StyleSheet.create({
   },
   calloutSubtitle: {
     fontSize: 14,
+  },
+  scrollView: {
+    flex: 1,
   },
 });

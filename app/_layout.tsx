@@ -11,7 +11,6 @@ const App = () => {
 
   useEffect(() => {
     onAuthStateChanged(FIREBASE_AUTH, (authUser => {
-      console.log('user', authUser),
       setUser(authUser);}));
   }, []);
   
