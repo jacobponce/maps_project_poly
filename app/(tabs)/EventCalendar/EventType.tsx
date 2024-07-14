@@ -4,5 +4,9 @@ export type EventType = {
     date: string;
     start: string;
     end: string;
-    location: string;
+    location: {
+      title: string;
+      latitude: number;
+      longitude: number;
+    }
   };
