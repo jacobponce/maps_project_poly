@@ -21,11 +21,10 @@ const useEventsList = () => {
 
     fetchEvents();
   }, [reload]);
-  console.log(events)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log('Reloading events...')
+      console.log('Reloading eventList...')
       setReload(prev => !prev); // Toggle the state to trigger re-fetching
     }, 60000); // 60000 ms = 1 minute
 

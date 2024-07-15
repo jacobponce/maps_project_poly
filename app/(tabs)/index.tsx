@@ -3,6 +3,9 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { FIREBASE_DB } from '@/FirebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
+import useEventsList from './EventCalendar/eventsList';
+import { EventType } from './EventCalendar/EventType';
+import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 
 interface Location {
   title: string;
@@ -26,45 +29,29 @@ const INITIAL_REGION = {
   longitudeDelta: 0.015,
 };
 
+
 export default function MapView1() {
-  const [locationsOfInterest, setLocationsOfInterest] = useState<LocationOfInterest[]>([]);
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(FIREBASE_DB, 'events'));
-        const events = querySnapshot.docs.map(doc => {
-          const data = doc.data();
-          return {
-            eventName: data.eventName,
-            clubName: data.clubName,
-            date: data.date,
-            start: data.start,
-            end: data.end,
-            location: {
-              title: data.location.title,
-              latitude: data.location.latitude,
-              longitude: data.location.longitude,
-            },
-          };
-        });
-        setLocationsOfInterest(events);
-      } catch (error) {
-        console.error('Error fetching events:', error);
-      }
-    };
+  const events = useEventsList();
 
-    fetchEvents();
-  }, []);
+  const groupedEvents = events.reduce((acc, event) => {
+    if (!acc[event.location.title]) {
+      acc[event.location.title] = [];
+    }
+    acc[event.location.title].push(event);
+    return acc;
+  }, {} as { [key: string]: LocationOfInterest[] }); // Create list of events grouped by loc
 
   const showLocationsOfInterest = () => {
-    return locationsOfInterest.map((item, index) => {
+    return Object.keys(groupedEvents).map((locationTitle, index) => {
+      const events = groupedEvents[locationTitle];
+      const firstEvent = events[0];
       const iconSource = require('@/assets/images/wbrawler.png');
       return (
         <Marker
           key={index}
-          coordinate={item.location}
-          title={item.eventName}
+          coordinate={firstEvent.location}
+          title={firstEvent.eventName}
         >
           <Image
             source={iconSource}
@@ -72,11 +59,16 @@ export default function MapView1() {
             resizeMode="contain" // Adjust how the image fits within the bounds 
           />
           <Callout>
-            <View style={styles.calloutContainer}>
-              <Text style={styles.calloutTitle}>Club: {item.clubName}</Text>
-              <Text style={styles.calloutSubtitle}>Event: {item.eventName}</Text>
-              <Text style={styles.calloutSubtitle}>Location: {item.location.title}</Text>
-            </View>
+            <GestureHandlerRootView style={styles.calloutContainer}>
+              <Text style={styles.calloutTitle}>Location: {locationTitle}</Text>
+              <ScrollView style={styles.scrollView}>
+                {events.map((event, eventIndex) => (
+                  <View key={eventIndex}>
+                    <Text style={styles.calloutSubtitle}>{event.clubName} - {event.eventName}</Text>
+                  </View>
+                ))}
+              </ScrollView>
+            </GestureHandlerRootView>
           </Callout>
         </Marker>
       );
@@ -120,5 +112,8 @@ const styles = StyleSheet.create({
   },
   calloutSubtitle: {
     fontSize: 14,
+  },
+  scrollView: {
+    flex: 1,
   },
 });
