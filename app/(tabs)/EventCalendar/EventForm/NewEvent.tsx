@@ -40,6 +40,7 @@ const LocationPicker = ({ onSelectLocation }: { onSelectLocation: (location: str
       <TextInput
         value={query}
         onChangeText={handleSearch}
+        onFocus={() => !query && setFilteredLocations(Object.keys(locationsDictionary))}
         placeholder="Search for a location"
         style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
       />
@@ -65,9 +66,42 @@ const List = ({ navigation }: any) => {
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(new Date()); // Added end state
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
-  const [showStartPicker, setShowStartPicker] = useState(false);
-  const [showEndPicker, setShowEndPicker] = useState(false); // Added showEndPicker state
+
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+
   const router = useRouter();
+
+  const handleStartDateChange = (event: any, selectedDate: any) => {
+    if (selectedDate) {
+      setStart(selectedDate);
+      setShowStartDatePicker(false);
+      setShowStartTimePicker(true); 
+      setEnd(selectedDate); // Set end date to match start date initially
+    }
+  };
+
+  const handleStartTimeChange = (event: any, selectedTime: any) => {
+    if (selectedTime) {
+      const newStartDateTime = new Date(start);
+      newStartDateTime.setHours(selectedTime.getHours());
+      newStartDateTime.setMinutes(selectedTime.getMinutes());
+      setStart(newStartDateTime);
+      setEnd(newStartDateTime); // Set end date to match start date initially
+      setShowStartTimePicker(false);
+    }
+  };
+
+  const handleEndTimeChange = (event: any, selectedTime: any) => {
+    if (selectedTime) {
+      const newEndDateTime = new Date(start);
+      newEndDateTime.setHours(selectedTime.getHours());
+      newEndDateTime.setMinutes(selectedTime.getMinutes());
+      setShowEndTimePicker(false);
+      setEnd(newEndDateTime);
+    }
+  };
 
   const addEvent = async () => {
     if (selectedLocation && eventName && clubName && date && start && end) {
@@ -131,42 +165,37 @@ const List = ({ navigation }: any) => {
         value={clubName}
         onChangeText={setClubName}
       />
-      <Button title="Start Date & Time" onPress={() => setShowStartPicker(true)} />
-      {showStartPicker && (
+      <Button title="Start Date & Time" onPress={() => setShowStartDatePicker(true)} />
+      {showStartDatePicker && (
         <DateTimePicker
           value={start}
-          mode="datetime"
+          mode="date"
           display="default"
-          minuteInterval={15}
-          timeZoneName='America/Los_Angeles'
-          onChange={(event, selectedDate) => {
-            setShowStartPicker(false);
-            if (selectedDate) {
-              setStart(selectedDate);
-              setEnd(selectedDate); // Set end date to match start date initially
-            }
-          }}
+          onChange={handleStartDateChange}
+        />
+      )}
+      {showStartTimePicker && (
+        <DateTimePicker
+          value={start}
+          mode="time"
+          display="default"
+          onChange={handleStartTimeChange}
         />
       )}
       <Text>Start: {start.toLocaleString()}</Text>
       <Button
         title="End Date & Time"
-        onPress={() => setShowEndPicker(true)}
+        onPress={() => setShowEndTimePicker(true)}
         disabled={!start} // Disable if start date is not set
       />
-      {showEndPicker && (
+      {showEndTimePicker && (
         <DateTimePicker
           value={end}
-          mode="datetime"
+          mode="time"
           display="default"
           minuteInterval={15}
           timeZoneName='America/Los_Angeles'
-          onChange={(event, selectedDate) => {
-            setShowEndPicker(false);
-            if (selectedDate) {
-              setEnd(selectedDate);
-            }
-          }}
+          onChange={handleEndTimeChange}
         />
       )}
       <Text>End: {end.toLocaleString()}</Text>
