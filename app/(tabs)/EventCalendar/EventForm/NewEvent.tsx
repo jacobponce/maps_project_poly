@@ -1,9 +1,11 @@
-import {View, Text, Button, FlatList, SafeAreaView, TextInput, TouchableOpacity} from 'react-native';
+import {View, Text, Button, FlatList, SafeAreaView, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import { FIREBASE_DB } from '@/FirebaseConfig';
 import { addDoc, collection } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Colors from '@/constants/Colors';
+import { defaultStyles } from '@/constants/Styles';
 
 const locationsDictionary: { [key: string]: { latitude: number; longitude: number } } = {
   "Business": { latitude:35.30015127563236, longitude:-120.66523106002076 },
@@ -35,8 +37,8 @@ const LocationPicker = ({ onSelectLocation }: { onSelectLocation: (location: str
   };
 
   return (
-    <View style={{ padding: 20 }}>
-      <Text>Select a Location:</Text>
+    <View >
+      <Text style={ styles.dateText }>Select a Location:</Text>
       <TextInput
         value={query}
         onChangeText={handleSearch}
@@ -70,16 +72,17 @@ const List = ({ navigation }: any) => {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [isStartFinalized, setIsStartFinalized] = useState(false);
+
 
   const router = useRouter();
 
   const handleStartDateChange = (event: any, selectedDate: any) => {
     if (selectedDate) {
       setStart(selectedDate);
-      setShowStartDatePicker(false);
-      setShowStartTimePicker(true); 
       setEnd(selectedDate); // Set end date to match start date initially
     }
+    setShowStartTimePicker(true); 
   };
 
   const handleStartTimeChange = (event: any, selectedTime: any) => {
@@ -88,8 +91,14 @@ const List = ({ navigation }: any) => {
       newStartDateTime.setHours(selectedTime.getHours());
       newStartDateTime.setMinutes(selectedTime.getMinutes());
       setStart(newStartDateTime);
-      setEnd(newStartDateTime); // Set end date to match start date initially
+      
+      const newEndDateTime = new Date(newStartDateTime);
+      newEndDateTime.setMinutes(newEndDateTime.getMinutes() + 30);
+      setEnd(newEndDateTime);
+
       setShowStartTimePicker(false);
+      setShowStartDatePicker(false);
+      setIsStartFinalized(true);
     }
   };
 
@@ -153,19 +162,24 @@ const List = ({ navigation }: any) => {
   }, [start]);
     
   return (
-    <SafeAreaView>
-      <Text>Events</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>New Event Request</Text>
       <TextInput
+        style={styles.input}
         placeholder="Event Name"
         value={eventName}
         onChangeText={setEventName}
       />
       <TextInput
+        style={styles.input}
         placeholder="Club Name"
         value={clubName}
         onChangeText={setClubName}
       />
-      <Button title="Start Date & Time" onPress={() => setShowStartDatePicker(true)} />
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={styles.dateText}>Start: {start.toLocaleString()}</Text>
+        <Button title="Start Date & Time" onPress={() => setShowStartDatePicker(true)} />
+      </View>
       {showStartDatePicker && (
         <DateTimePicker
           value={start}
@@ -182,12 +196,14 @@ const List = ({ navigation }: any) => {
           onChange={handleStartTimeChange}
         />
       )}
-      <Text>Start: {start.toLocaleString()}</Text>
-      <Button
-        title="End Date & Time"
-        onPress={() => setShowEndTimePicker(true)}
-        disabled={!start} // Disable if start date is not set
-      />
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={styles.dateText}>End: {end.toLocaleString()}</Text>
+        <Button
+          title="End Date & Time"
+          onPress={() => setShowEndTimePicker(true)}
+          disabled={!isStartFinalized}
+        />
+      </View>
       {showEndTimePicker && (
         <DateTimePicker
           value={end}
@@ -198,15 +214,57 @@ const List = ({ navigation }: any) => {
           onChange={handleEndTimeChange}
         />
       )}
-      <Text>End: {end.toLocaleString()}</Text>
       <LocationPicker onSelectLocation={setSelectedLocation} />
-      <Button
-        title="Add Event"
-        onPress={handlePress}
-        disabled={!isFormValid()}
-      />
+      <TouchableOpacity style={[defaultStyles.btn, styles.btnPrimary]} >
+            <Text 
+              style={styles.btnPrimaryText} 
+              onPress={handlePress}
+              disabled={!isFormValid()}
+              >Send Event Request
+              </Text>
+          </TouchableOpacity>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#ffffff',
+    borderLeftWidth: 20,
+    borderLeftColor: '#ffffff',
+    borderRightWidth: 20,
+    borderRightColor: '#ffffff',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 20,
+    textAlign: 'center',
+    color: Colors.green,
+  },
+  input: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  dateText: {
+    fontSize: 16,
+    marginVertical: 10,
+  },
+  btnPrimary: {
+    backgroundColor: Colors.primary,
+    marginVertical: 4,
+  },
+  btnPrimaryText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+});
 
 export default List;
