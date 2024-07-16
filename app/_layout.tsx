@@ -4,7 +4,6 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { FIREBASE_AUTH } from '@/FirebaseConfig';
 import { useRouter, Stack } from 'expo-router';
 
-// const Stack = createNativeStackNavigator();
 const App = () => {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
