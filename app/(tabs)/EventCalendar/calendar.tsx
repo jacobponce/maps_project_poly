@@ -2,19 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, FlatList, View, Text, TouchableOpacity, StyleSheet, Button, TextInput } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Calendar } from 'react-native-calendars';
-import { router, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import useEventsList from './eventsList';
 import { EventType } from './EventType';
-// Define the event object type
-
-// export type EventType = {
-//   eventName: string;
-//   clubName: string;
-// data: string;
-//   start: Date;
-//   end: Date;
-//   location: string;
-// };
 
 const styles = StyleSheet.create({
   container: {
@@ -62,7 +52,7 @@ const styles = StyleSheet.create({
   },
   dropdownClubText: {
     fontSize: 16,
-  }
+  },
 });
 
 // Modified Event component to include collapsible functionality
@@ -86,7 +76,6 @@ const ClubEvents = () => {
   });
 
   const events = useEventsList();
-
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
@@ -123,61 +112,63 @@ const ClubEvents = () => {
     setShowDropdown(text.length > 0);
   };
 
+  const handleClubSelect = (clubName: string) => {
+    router.replace('/(tabs)/EventCalendar/ClubInfoCard?clubName=${clubName}');
+    console.log('Going to Card with Club Name: ${clubName}');
+  };
+
   return (
     <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: '#ffffff',
-        justifyContent: 'flex-start',
-        borderLeftWidth: 20,
-        borderLeftColor: '#ffffff',
-        borderRightWidth: 20,
-        borderRightColor: '#ffffff',
-      }}
-    >
-      <Text style={{ fontSize: 30, paddingTop: 10, marginBottom: 10 }}>Club Events</Text>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.search}
-          placeholder="Search Club Event"
-          value={searchQuery}
-          onChangeText={handleSearchChange}
-        />
-        {showDropdown && (
-          <View style={styles.dropdown}>
-            <FlatList
-              data={filteredClubs}
-              renderItem={({item}) => (
-                <TouchableOpacity
-                  style={styles.dropdownClub}
-                  onPress={() => {
-                  setSearchQuery(item);
-                  setShowDropdown(false);
-                }}
+    style={{
+      flex: 1,
+      backgroundColor: '#ffffff',
+      justifyContent: 'flex-start',
+      borderLeftWidth: 20,
+      borderLeftColor: '#ffffff',
+      borderRightWidth: 20,
+      borderRightColor: '#ffffff',
+    }}
+  >
+    <Text style={{ fontSize: 30, paddingTop: 10, marginBottom: 10 }}>Club Events</Text>
+    <View style={styles.searchContainer}>
+      <TextInput
+        style={styles.search}
+        placeholder="Search Club Event"
+        value={searchQuery}
+        onChangeText={handleSearchChange}
+      />
+      {showDropdown && (
+        <View style={styles.dropdown}>
+          <FlatList
+            data={filteredClubs}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                style={styles.dropdownClub}
+                onPress={() => handleClubSelect(item)}
               >
                 <Text style={styles.dropdownClubText}>{item}</Text>
               </TouchableOpacity>
             )}
             keyExtractor={(item, index) => index.toString()}
-            />
+          />
         </View>
       )}
-      </View>
-      <Calendar
-        markedDates={markedDates}
-        onDayPress={(day: { dateString: string }) => setSelectedDate(day.dateString)}
-      />
-      <Button
-        title="New Event"
-        onPress={() => navNewEvent()}
-      />
-      {selectedDate ? (
-        eventsForSelectedDate.length > 0 ? (
+    </View>
+    <Calendar
+      markedDates={markedDates}
+      onDayPress={(day: { dateString: string }) => setSelectedDate(day.dateString)}
+    />
+    <Button
+      title="New Event"
+      onPress={() => navNewEvent()}
+    />
+    {selectedDate ? (
+      eventsForSelectedDate.length > 0 ? (
         <FlatList
           data={eventsForSelectedDate}
           renderItem={({ item }) => (<Event event={item} expanded={item.date === selectedDate} />)}
           keyExtractor={(item, index) => index.toString()}
-      />
+        />
       ) : (
         <View style={{ padding: 10 }}>
           <Text style={{ fontSize: 24 }}>You have no events today.</Text>
@@ -188,8 +179,8 @@ const ClubEvents = () => {
         <Text style={{ fontSize: 24 }}>Select a date to see the events.</Text>
       </View>
     )}
-    </SafeAreaView>
-  );
+  </SafeAreaView>
+);
 };
 
 export default ClubEvents;
