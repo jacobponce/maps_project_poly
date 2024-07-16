@@ -142,7 +142,7 @@ const List = ({ navigation }: any) => {
   };
 
   const returnBack = () => {
-    router.back();
+    router.replace('/(tabs)/EventCalendar/calendar');
     console.log('Going to calendar...');
   };
 

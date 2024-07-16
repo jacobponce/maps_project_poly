@@ -3,7 +3,6 @@ import React from 'react';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
 
@@ -51,6 +50,12 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="EventCalendar/eventsList"
+        options={{
+          href: null
+        }}
+      />
+      <Tabs.Screen
+        name="EventCalendar/ClubInfoCard"
         options={{
           href: null
         }}

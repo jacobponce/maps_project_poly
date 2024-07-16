@@ -113,8 +113,8 @@ const ClubEvents = () => {
   };
 
   const handleClubSelect = (clubName: string) => {
-    router.replace('/(tabs)/EventCalendar/ClubInfoCard?clubName=${clubName}');
-    console.log('Going to Card with Club Name: ${clubName}');
+    router.replace(`/(tabs)/EventCalendar/ClubInfoCard?clubName=${clubName}`);
+    console.log(`Going to Card with Club Name: ${clubName}`);
   };
 
   return (
