@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, FlatList, View, Text, TouchableOpacity, StyleSheet, Button, TextInput } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Calendar } from 'react-native-calendars';
-import { router, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import useEventsList from './eventsList';
 import { EventType } from './EventType';
 // Define the event object type
