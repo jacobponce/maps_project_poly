@@ -5,6 +5,8 @@ import { defaultStyles } from '@/constants/Styles';
 import { FIREBASE_AUTH } from '@/FirebaseConfig';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+
+
 const UserPage = () => {
     const user = FIREBASE_AUTH.currentUser;
     const email = user?.email;
