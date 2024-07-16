@@ -55,6 +55,12 @@ export default function TabLayout() {
           href: null
         }}
       />
+      <Tabs.Screen
+        name="EventCalendar/ClubInfoCard"
+        options={{
+          href: null
+        }}
+      />
     </Tabs>
   );
 }
