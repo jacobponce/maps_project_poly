@@ -26,20 +26,9 @@ const App = () => {
   }, [user, router]);
   return (
     <Stack>
-      {/* <Stack.Screen name="index" options={{ headerShown: false }} /> */}
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown:false }} />
     </Stack>
   )
-
-  // return (
-  //   <GestureHandlerRootView style={{ flex: 1 }}>
-  //     <NavigationContainer independent={true}>
-  //       <Stack.Navigator initialRouteName='index'>
-  //         {user ? <Stack.Screen name="tabs" component={InsideLayout} options={{ headerShown: false }} /> : <Stack.Screen name="login" component={Login} options={{ headerShown: false }} />}
-  //       </Stack.Navigator>
-  //     </NavigationContainer>
-  //   </GestureHandlerRootView>
-  // );
 };
 export default App;

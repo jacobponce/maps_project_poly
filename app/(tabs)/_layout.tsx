@@ -1,4 +1,5 @@
 import { Tabs } from 'expo-router';
+import { useEffect } from 'react';
 import React from 'react';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
