@@ -178,13 +178,10 @@ export default function MapView1() {
         latitudeDelta: 0.01,
         longitudeDelta: 0.015,
     });
-    console.log('handleLocationSelect called');
-    console.log('markersList.current:', markersList.current);
     const index = Object.keys(groupedEvents).findIndex((locationTitle) => locationTitle === location);
     const marker = markersList.current[index];
     if (marker) {
       // Perform actions with the marker
-      console.log(`Marker found for index ${index}:`, marker);
       marker.showCallout();
     } else {
       console.log(`No marker found for index ${index}`);
