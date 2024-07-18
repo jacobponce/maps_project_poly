@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import MapView, { Marker, Callout } from 'react-native-maps';
+import React, { useEffect, useRef, useState } from 'react';
+import MapView, { Marker, Callout, MapMarker } from 'react-native-maps';
 import { StyleSheet, View, Image, Text, TextInput, FlatList, TouchableOpacity } from 'react-native';
 import { FIREBASE_DB } from '@/FirebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
@@ -102,12 +102,11 @@ const styles = StyleSheet.create({
 });
 
 export default function MapView1() {
-
+  const markersList = useRef<(MapMarker | null)[]>([]);
   const events = useEventsList();
   const [search, setSearch] = useState('');
   const [filteredLocations, setFilteredLocations] = useState<string[]>([]);
   const [region, setRegion] = useState<Region>(INITIAL_REGION);
-
 
   const groupedEvents = events.reduce((acc, event) => {
     if (!acc[event.location.title]) {
@@ -117,16 +116,23 @@ export default function MapView1() {
     return acc;
   }, {} as { [key: string]: LocationOfInterest[] }); // Create list of events grouped by loc
 
+
   const showLocationsOfInterest = () => {
     return Object.keys(groupedEvents).map((locationTitle, index) => {
       const events = groupedEvents[locationTitle];
       const firstEvent = events[0];
       const iconSource = require('@/assets/images/wbrawler.png');
+
       return (
         <Marker
           key={index}
           coordinate={firstEvent.location}
           title={firstEvent.eventName}
+          ref={(ref) => {
+            if (ref) {
+              markersList.current[index] = ref;
+            }
+          }}
         >
           <Image
             source={iconSource}
@@ -167,12 +173,24 @@ export default function MapView1() {
     setFilteredLocations([]);
     const selectedLocation = locationsDictionary[location];
     setRegion({
-      latitude: selectedLocation.latitude,
-      longitude: selectedLocation.longitude,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.015,
+        latitude: selectedLocation.latitude,
+        longitude: selectedLocation.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.015,
     });
-  };
+    console.log('handleLocationSelect called');
+    console.log('markersList.current:', markersList.current);
+    const index = Object.keys(groupedEvents).findIndex((locationTitle) => locationTitle === location);
+    const marker = markersList.current[index];
+    if (marker) {
+      // Perform actions with the marker
+      console.log(`Marker found for index ${index}:`, marker);
+      marker.showCallout();
+    } else {
+      console.log(`No marker found for index ${index}`);
+    }
+
+};
 
 
   return (
