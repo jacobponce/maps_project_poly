@@ -17,7 +17,6 @@ import {
   Image,
   Platform,
 } from 'react-native';
-// someting
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Login = () => {
