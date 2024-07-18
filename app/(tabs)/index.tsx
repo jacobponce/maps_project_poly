@@ -116,11 +116,13 @@ export default function MapView1() {
     return acc;
   }, {} as { [key: string]: LocationOfInterest[] }); // Create list of events grouped by loc
 
+
   const showLocationsOfInterest = () => {
     return Object.keys(groupedEvents).map((locationTitle, index) => {
       const events = groupedEvents[locationTitle];
       const firstEvent = events[0];
       const iconSource = require('@/assets/images/wbrawler.png');
+
       return (
         <Marker
           key={index}
