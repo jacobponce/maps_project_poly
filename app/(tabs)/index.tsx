@@ -6,7 +6,8 @@ import { collection, getDocs } from 'firebase/firestore';
 import useEventsList from './EventCalendar/eventsList';
 import { EventType } from './EventCalendar/EventType';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
-import { SearchBar } from 'react-native-elements';
+import locationsDictionary from '@/constants/Locations';
+
 
 interface Location {
   title: string;
@@ -35,13 +36,6 @@ const INITIAL_REGION: Region = {
   longitude: -120.660,
   latitudeDelta: 0.01,
   longitudeDelta: 0.015,
-};
-
-const locationsDictionary: { [key: string]: { latitude: number; longitude: number } } = {
-  "Business": { latitude:35.30015127563236, longitude:-120.66523106002076 },
-  "Jacob House": { latitude: 35.30816, longitude: -120.65937 },
-  "Location C": { latitude: 37.774929, longitude: -122.419418 },
-  // Add more locations as needed
 };
 
 const styles = StyleSheet.create({
