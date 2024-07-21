@@ -21,9 +21,9 @@ const UserPage = () => {
         <View style={styles.content}>
           <View style={styles.profile}>
             <Text style={styles.labelFont}>Email: {email}</Text>
-            <Button title="Club Info" onPress={navClubInfo} />
+            <Button title="My Club" onPress={navClubInfo} />
           </View>
-          <View style={styles.buttonContainer}>
+          <View>
               <TouchableOpacity style={[defaultStyles.btn, styles.btnPrimary]}>
                   <Text style={styles.btnPrimaryText} onPress={() => {
                       console.log('Signing out...');
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     profile: {
       flexDirection: "column",
       alignItems: "flex-start",
-      marginVertical: 10,
+      marginVertical: 20,
       marginHorizontal: 20,
     },
     labelFont: {
@@ -89,9 +89,6 @@ const styles = StyleSheet.create({
       color: '#fff',
       fontSize: 16,
     },
-    buttonContainer: {
-      marginBottom: 30,
-    }
   });
   
 export default UserPage;

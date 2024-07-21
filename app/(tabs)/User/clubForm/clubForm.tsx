@@ -70,6 +70,11 @@ const ClubForm = ({ navigation }: any) => {
       console.log('Going back...');
     };
 
+    const handleSavePress = () => {
+        handleSave();
+        returnBack();
+    }
+
     return (
         <SafeAreaView>
             <BackButton onPress={returnBack}/>
@@ -94,7 +99,7 @@ const ClubForm = ({ navigation }: any) => {
                         multiline
                     />
                 </View>
-                <Button title="Save" onPress={handleSave} />
+                <Button title="Save" onPress={handleSavePress} />
             </View>
         </SafeAreaView>
     );
