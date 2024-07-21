@@ -2,7 +2,7 @@ import { Tabs } from 'expo-router';
 import { useEffect } from 'react';
 import React from 'react';
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
+import { Icon } from '@/components/navigation/TabBarIcon';
 import Colors from '@/constants/Colors';
 
 export default function TabLayout() {
@@ -21,16 +21,16 @@ export default function TabLayout() {
         options={{
           title: '',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'map' : 'map-outline'} color={color} />
+            <Icon name={focused ? 'map' : 'map-outline'} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="EventCalendar/calendar"
+        name="EventCalendar/Calendar/calendar"
         options={{
           title: '',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'calendar' : 'calendar-outline'} color={color} />
+            <Icon name={focused ? 'calendar' : 'calendar-outline'} color={color} />
           ),
         }}
       />
@@ -39,7 +39,7 @@ export default function TabLayout() {
         options={{
           title: '',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
+            <Icon name={focused ? 'person' : 'person-outline'} color={color} />
           ),
         }}
       />
@@ -56,7 +56,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="EventCalendar/ClubInfoCard"
+        name="EventCalendar/Calendar/ClubInfoCard/ClubInfoCard"
+        options={{
+          href: null
+        }}
+      />
+      <Tabs.Screen
+        name="User/clubForm/clubForm"
         options={{
           href: null
         }}
