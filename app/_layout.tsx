@@ -17,7 +17,7 @@ const App = () => {
     if (router && user !== undefined) {
       if (user) {
         console.log("Navigating to tabs...");
-      router.replace('/(tabs)');
+        router.replace('/(tabs)');
       } else {
         console.log("Navigating to login...");
         router.replace('/');

@@ -7,6 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
 import locationsDictionary from '@/constants/Locations';
+import BackButton from '@/components/BackButton';
 
 const LocationPicker = ({ onSelectLocation }: { onSelectLocation: (location: string) => void }) => {
   const [query, setQuery] = useState('');
@@ -136,7 +137,7 @@ const List = ({ navigation }: any) => {
   };
 
   const returnBack = () => {
-    router.replace('/(tabs)/EventCalendar/calendar');
+    router.replace('/(tabs)/EventCalendar/Calendar/calendar');
     console.log('Going to calendar...');
   };
 
@@ -157,6 +158,7 @@ const List = ({ navigation }: any) => {
     
   return (
     <SafeAreaView style={styles.container}>
+      <BackButton  onPress={returnBack} />
       <Text style={styles.title}>New Event Request</Text>
       <TextInput
         style={styles.input}
@@ -234,7 +236,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 20,
     textAlign: 'center',
     color: Colors.green,
@@ -259,6 +261,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
+  backButton: {
+    backgroundColor: Colors.primary,
+
+  },
+  backButtonText: {
+    color: Colors.white,
+  }
 });
 
 export default List;
