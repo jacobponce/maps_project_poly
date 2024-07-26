@@ -3,8 +3,9 @@ import { SafeAreaView, FlatList, View, Text, TouchableOpacity, StyleSheet, Butto
 import { useFonts } from 'expo-font';
 import { Calendar } from 'react-native-calendars';
 import { useRouter } from 'expo-router';
-import useEventsList from './eventsList';
-import { EventType } from './EventType';
+import useEventsList from '../eventsList';
+import { EventType } from '../EventType';
+import { useAppFonts } from '@/constants/Fonts';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,7 +21,8 @@ const styles = StyleSheet.create({
     fontFamily: 'NunitoSans',
   },
   details: {
-    paddingTop: 10,
+    paddingTop: 5,
+    fontFamily: 'NunitoSans',
   },
   searchContainer: {
     position: 'relative',
@@ -49,9 +51,11 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: 'black', 
+    fontFamily: 'NunitoSans',
   },
   dropdownClubText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans',
   },
 });
 
@@ -60,20 +64,17 @@ const Event = ({ event, expanded }: { event: EventType, expanded: boolean }) => 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{event.eventName}</Text>
-      <Text>Club Name: {event.clubName}</Text>
-      <Text>Start: {event.start}</Text>
-      <Text>End: {event.end}</Text>
-      <Text>Location: {event.location.title}</Text>
+      <Text style={styles.details}>Club Name: {event.clubName}</Text>
+      <Text style={styles.details}>Start: {event.start}</Text>
+      <Text style={styles.details}>End: {event.end}</Text>
+      <Text style={styles.details}>Location: {event.location.title}</Text>
     </View>
   );
 };
 
 // Main component where events are stored and managed
 const ClubEvents = () => {
-  const [fontsLoaded] = useFonts({
-    'NunitoSans': require('../../../assets/fonts/NunitoSans.ttf'),
-    'WorkSans': require('../../../assets/fonts/WorkSans-Bold.ttf'),
-  });
+  const fontsLoaded = useAppFonts();
 
   const events = useEventsList();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -103,7 +104,7 @@ const ClubEvents = () => {
   }, []);
 
   const navNewEvent = () => {
-    router.replace('/(tabs)/EventCalendar/EventForm/NewEvent');
+    router.push('/(tabs)/EventCalendar/EventForm/NewEvent');
     console.log('Going to new event...');
   };
 
@@ -113,7 +114,7 @@ const ClubEvents = () => {
   };
 
   const handleClubSelect = (clubName: string) => {
-    router.replace(`/(tabs)/EventCalendar/ClubInfoCard?clubName=${clubName}`);
+    router.push(`/(tabs)/EventCalendar/Calendar/ClubInfoCard/ClubInfoCard?clubName=${clubName}`);
     console.log(`Going to Card with Club Name: ${clubName}`);
   };
 
@@ -127,6 +128,7 @@ const ClubEvents = () => {
       borderLeftColor: '#ffffff',
       borderRightWidth: 20,
       borderRightColor: '#ffffff',
+      borderColor: '#ffffff',
     }}
   >
     <Text style={{ fontSize: 30, paddingTop: 10, marginBottom: 10 }}>Club Events</Text>
